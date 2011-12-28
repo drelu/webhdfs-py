@@ -16,9 +16,9 @@ setup(name='WebHDFS',
                     'Topic :: Utilities',
                     ],
       platforms = ('Unix', 'Linux', 'Mac OS'),
-      packages=['webhdfs', 'examples'],
+      packages=['webhdfs'],
       data_files=['webhdfs/VERSION'],
-      install_requires=['httplib'],
+      install_requires=[],
       entry_points = {
         'console_scripts': []
       }
