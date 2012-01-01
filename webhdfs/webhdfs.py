@@ -52,7 +52,7 @@ class WebHDFS(object):
      
      
     def copyFromLocal(self, source_path, target_path, replication=1):
-        url_path = WEBHDFS_CONTEXT_ROOT + target_path + '?op=CREATE&overwrite=true&user.name='+self.username
+        url_path = WEBHDFS_CONTEXT_ROOT + "/" + target_path + '?op=CREATE&overwrite=true&user.name='+self.username
         
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('PUT', url_path , headers={})
@@ -80,7 +80,7 @@ class WebHDFS(object):
         
         
     def copyToLocal(self, source_path, target_path):
-        url_path = WEBHDFS_CONTEXT_ROOT + source_path+'?op=OPEN&overwrite=true&user.name='+self.username
+        url_path = WEBHDFS_CONTEXT_ROOT + "/" + source_path+'?op=OPEN&overwrite=true&user.name='+self.username
         logger.debug("GET URL: %s"%url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('GET', url_path , headers={})
