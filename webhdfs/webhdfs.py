@@ -57,9 +57,9 @@ class WebHDFS(object):
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('PUT', url_path , headers={})
         response = httpClient.getresponse()
+        logger.debug("HTTP Response: %d, %s"%(response.status, response.reason))
         msg = response.msg
         redirect_location = msg["location"]
-        logger.debug("HTTP Response: %d, %s"%(response.status, response.reason))
         logger.debug("HTTP Location: %s"%(redirect_location))
         result = urlparse.urlparse(redirect_location)
         redirect_host = result.netloc[:result.netloc.index(":")]
