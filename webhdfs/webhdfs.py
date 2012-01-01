@@ -9,6 +9,7 @@ logging.basicConfig(level=logging.DEBUG, datefmt='%m/%d/%Y %I:%M:%S %p',
                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(name='webhdfs')
 
+WEBHDFS_CONTEXT_ROOT="/webhdfs/v1"
 
 class WebHDFS(object):       
     """ Class for accessing HDFS via WebHDFS 
@@ -31,7 +32,7 @@ class WebHDFS(object):
         
     
     def mkdir(self, path):
-        url_path = '/webhdfs'+path+'?op=MKDIRS&user.name='+self.username
+        url_path = WEBHDFS_CONTEXT_ROOT + path +'?op=MKDIRS&user.name='+self.username
         logger.debug("Create directory: " + url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('PUT', url_path , headers={})
@@ -41,7 +42,7 @@ class WebHDFS(object):
         
         
     def rmdir(self, path):
-        url_path = '/webhdfs'+path+'?op=DELETE&recursive=true&user.name='+self.username
+        url_path = WEBHDFS_CONTEXT_ROOT + path +'?op=DELETE&recursive=true&user.name='+self.username
         logger.debug("Delete directory: " + url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('DELETE', url_path , headers={})
@@ -51,7 +52,7 @@ class WebHDFS(object):
      
      
     def copyFromLocal(self, source_path, target_path, replication=1):
-        url_path = '/webhdfs'+target_path+'?op=CREATE&overwrite=true&user.name='+self.username
+        url_path = WEBHDFS_CONTEXT_ROOT + target_path + '?op=CREATE&overwrite=true&user.name='+self.username
         
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('PUT', url_path , headers={})
@@ -79,7 +80,7 @@ class WebHDFS(object):
         
         
     def copyToLocal(self, source_path, target_path):
-        url_path = '/webhdfs'+source_path+'?op=OPEN&overwrite=true&user.name='+self.username
+        url_path = WEBHDFS_CONTEXT_ROOT + source_path+'?op=OPEN&overwrite=true&user.name='+self.username
         logger.debug("GET URL: %s"%url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('GET', url_path , headers={})
@@ -119,7 +120,7 @@ class WebHDFS(object):
      
      
     def listdir(self, path):
-        url_path = '/webhdfs'+path+'?op=LISTSTATUS&user.name='+self.username
+        url_path = WEBHDFS_CONTEXT_ROOT +path+'?op=LISTSTATUS&user.name='+self.username
         logger.debug("List directory: " + url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('GET', url_path , headers={})
