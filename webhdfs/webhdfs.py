@@ -127,7 +127,11 @@ class WebHDFS(object):
         response = httpClient.getresponse()
         logger.debug("HTTP Response: %d, %s"%(response.status, response.reason))
         data_dict = json.loads(response.read())
-        files = [i["localName"] for i in data_dict["HdfsFileStatus"]]
+        logger.debug("Data: " + str(data_dict))
+        files=[]        
+        for i in data_dict["FileStatuses"]["FileStatus"]:
+            logger.debug(i["type"] + ": " + i["pathSuffix"]) 
+            files.append(i["pathSuffix"])        
         httpClient.close()
         return files
     

@@ -1,4 +1,4 @@
-from webhdfs.webhdfs import WebHDFS
+from webhdfs import WebHDFS
 import os, tempfile
 import time
 
@@ -19,7 +19,7 @@ webhdfs.copyFromLocal(f.name,
 webhdfs.copyToLocal("/hello-world/test.txt",
                     "/tmp/test1.txt")
     
-for i in webhdfs.listdir("/"):
+for i in webhdfs.listdir("/hello-world/"):
     print str(i)
     
 f.close()
