@@ -32,7 +32,10 @@ class WebHDFS(object):
         
     
     def mkdir(self, path):
-        url_path = urllib.quote(WEBHDFS_CONTEXT_ROOT + path +'?op=MKDIRS&user.name='+self.username)
+        if os.path.isabs(path)==False:
+            raise Exception("Only absolute paths supported: %s"%(path))
+        
+        url_path = WEBHDFS_CONTEXT_ROOT + path +'?op=MKDIRS&user.name='+self.username
         logger.debug("Create directory: " + url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('PUT', url_path , headers={})
@@ -42,7 +45,10 @@ class WebHDFS(object):
         
         
     def rmdir(self, path):
-        url_path = urllib.quote(WEBHDFS_CONTEXT_ROOT + path +'?op=DELETE&recursive=true&user.name='+self.username)
+        if os.path.isabs(path)==False:
+            raise Exception("Only absolute paths supported: %s"%(path))
+        
+        url_path = WEBHDFS_CONTEXT_ROOT + path +'?op=DELETE&recursive=true&user.name='+self.username
         logger.debug("Delete directory: " + url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('DELETE', url_path , headers={})
@@ -52,7 +58,10 @@ class WebHDFS(object):
      
      
     def copyFromLocal(self, source_path, target_path, replication=1):
-        url_path =  urllib.quote(WEBHDFS_CONTEXT_ROOT +  target_path + '?op=CREATE&overwrite=true&user.name='+self.username)
+        if os.path.isabs(target_path)==False:
+            raise Exception("Only absolute paths supported: %s"%(target_path))
+        
+        url_path = WEBHDFS_CONTEXT_ROOT +  target_path + '?op=CREATE&overwrite=true&user.name='+self.username
         
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('PUT', url_path , headers={})
@@ -80,7 +89,9 @@ class WebHDFS(object):
         
         
     def copyToLocal(self, source_path, target_path):
-        url_path = urllib.quote(WEBHDFS_CONTEXT_ROOT + "/" + source_path+'?op=OPEN&overwrite=true&user.name='+self.username)
+        if os.path.isabs(source_path)==False:
+            raise Exception("Only absolute paths supported: %s"%(source_path))
+        url_path = WEBHDFS_CONTEXT_ROOT + source_path+'?op=OPEN&overwrite=true&user.name='+self.username
         logger.debug("GET URL: %s"%url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('GET', url_path , headers={})
@@ -120,7 +131,10 @@ class WebHDFS(object):
      
      
     def listdir(self, path):
-        url_path = urllib.quote(WEBHDFS_CONTEXT_ROOT +path+'?op=LISTSTATUS&user.name='+self.username)
+        if os.path.isabs(path)==False:
+            raise Exception("Only absolute paths supported: %s"%(path))
+        
+        url_path = urllib.quote(WEBHDFS_CONTEXT_ROOT + path+'?op=LISTSTATUS&user.name='+self.username)
         logger.debug("List directory: " + url_path)
         httpClient = self.__getNameNodeHTTPClient()
         httpClient.request('GET', url_path , headers={})
