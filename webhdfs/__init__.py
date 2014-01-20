@@ -5,7 +5,7 @@ logging.basicConfig(level=logging.DEBUG, datefmt='%m/%d/%Y %I:%M:%S %p',
                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(name='webhdfs')
 
-version = "latest"
+version = "0.2.0"
 
 try:
     fn = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'VERSION')
