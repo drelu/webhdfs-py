@@ -4,7 +4,7 @@ import time
 
 webhdfs = WebHDFS("localhost", 50070, "luckow")
 
-webhdfs.mkdir("/hello-world/")
+webhdfs.mkdir("/tmp/hello-world/")
 
 # create a temporary file
 f = tempfile.NamedTemporaryFile()
@@ -14,7 +14,7 @@ f.flush()
 print "Upload file: " + f.name
 
 webhdfs.copyFromLocal(f.name, 
-                      "/hello-world/test.txt")
+                      "/tmp/test.txt")
     
 webhdfs.copyToLocal("/hello-world/test.txt",
                     "/tmp/test1.txt")
