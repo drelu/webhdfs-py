@@ -1,4 +1,4 @@
-from webhdfs import WebHDFS
+from webhdfs.webhdfs import WebHDFS
 import os, tempfile
 import time
 
