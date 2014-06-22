@@ -8,6 +8,8 @@ Webhdfs-py has no further dependencies and solely relies on the Python standard 
 
 ## Hadoop configuration
 
+Supported Hadoop version: 2.x (including 2.4). Tested with HDP 2.1
+
 Ensure that WebHDFS is enabled in the `hdfs-site.xml`:
 
 Relevant properties:
