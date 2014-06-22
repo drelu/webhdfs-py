@@ -87,13 +87,45 @@ class WebHDFS(object):
         fileUploadClient.close()
         return response.status 
     
-     
+    
+    def get(self, source_path):
+        if os.path.isabs(source_path)==False:
+            raise Exception("Only absolute paths supported: %s"%(source_path))
+        url_path = WEBHDFS_CONTEXT_ROOT + source_path+'?op=OPEN&overwrite=true&user.name='+self.username
+        logger.debug("GET URL: %s"%url_path)
+        httpClient = self.__getNameNodeHTTPClient()
+        httpClient.request('GET', url_path , headers={})
+        response = httpClient.getresponse()
+        data = None
+        if response.length!=None:
+            msg = response.msg
+            redirect_location = msg["location"]
+            logger.debug("HTTP Response: %d, %s"%(response.status, response.reason))
+            logger.debug("HTTP Location: %s"%(redirect_location))
+            result = urlparse.urlparse(redirect_location)
+            redirect_host = result.netloc[:result.netloc.index(":")]
+            redirect_port = result.netloc[(result.netloc.index(":")+1):]
+            
+            redirect_path = result.path + "?" + result.query  
+                
+            logger.debug("Send redirect to: host: %s, port: %s, path: %s "%(redirect_host, redirect_port, redirect_path))
+            fileDownloadClient = httplib.HTTPConnection(redirect_host, 
+                                                      redirect_port, timeout=600)
+            
+            fileDownloadClient.request('GET', redirect_path, headers={})
+            response = fileDownloadClient.getresponse()
+            logger.debug("HTTP Response: %d, %s"%(response.status, response.reason))
+            data=response.read()            
+        httpClient.close()        
+        return data
+    
+         
     def copyFromLocal(self, source_path, target_path, replication=1):
         f = open(source_path, "r")
         source_data = f.read()
         f.close()
         return self.put(source_data, target_path, replication)
-                
+               
         
     def copyToLocal(self, source_path, target_path):
         if os.path.isabs(source_path)==False:
