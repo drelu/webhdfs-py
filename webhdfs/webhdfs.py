@@ -57,7 +57,7 @@ class WebHDFS(object):
         httpClient.close()
      
      
-    def copyFromLocal(self, source_path, target_path, replication=1):
+    def put(self, source_data, target_path, replication=1):
         if os.path.isabs(target_path)==False:
             raise Exception("Only absolute paths supported: %s"%(target_path))
         
@@ -80,13 +80,20 @@ class WebHDFS(object):
         fileUploadClient = httplib.HTTPConnection(redirect_host, 
                                                   redirect_port, timeout=600)
         # This requires currently Python 2.6 or higher
-        fileUploadClient.request('PUT', redirect_path, open(source_path, "r").read(), headers={})
+        fileUploadClient.request('PUT', redirect_path, source_data, headers={})
         response = fileUploadClient.getresponse()
         logger.debug("HTTP Response: %d, %s"%(response.status, response.reason))
         httpClient.close()
         fileUploadClient.close()
-        return response.status
-        
+        return response.status 
+    
+     
+    def copyFromLocal(self, source_path, target_path, replication=1):
+        f = open(source_path, "r")
+        source_data = f.read()
+        f.close()
+        return self.put(source_data, target_path, replication)
+                
         
     def copyToLocal(self, source_path, target_path):
         if os.path.isabs(source_path)==False:
